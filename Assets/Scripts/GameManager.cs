@@ -1,7 +1,9 @@
 using Dreamteck.Splines;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +14,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SplineModify spline;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Draw draw;
-    [SerializeField] private Animator anim;
 
     [Space, Header("Game settings")]
     [SerializeField] private LevelsConfig levelsConfig;
@@ -24,7 +25,9 @@ public class GameManager : MonoBehaviour
     private Vector3[] _cachedPoints;
     private List<CharController> _chars = new List<CharController>();
     private bool _isGameStarted = false;
+    private bool _isGameFinished = false;
 
+    public Level CurrentLevel => _currentLevel;
     public Draw Draw => draw;
     public bool IsGameStarted => _isGameStarted;
 
@@ -45,7 +48,7 @@ public class GameManager : MonoBehaviour
 
         draw.OnLineUpdate.AddListener((Vector3[] v) => 
         {
-            if (!_isGameStarted) _isGameStarted = true;
+            if (!_isGameStarted && !_isGameFinished) _isGameStarted = true;
 
             uiController.ChangeTipStatus(!_isGameStarted);
             StartGame(); 
@@ -63,15 +66,29 @@ public class GameManager : MonoBehaviour
         _currentLevel.StartLevel();
     }
 
-    private void StopGame()
+    private void StopGame(bool isFinish)
     {
-        _currentLevel?.StopLevel();
+        _currentLevel?.StopLevel(isFinish);
+        _isGameFinished = true;
 
-        foreach(CharController c in _chars)
+        if(!isFinish)
+        {
+            StartCoroutine(RestartOnDelay(1));
+            return;
+        }
+
+        StartCoroutine(RestartOnDelay(8));
+
+        foreach (CharController c in _chars)
         {
             c.Win();
         }
+    }
 
+    private IEnumerator RestartOnDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void CharInst()
@@ -82,6 +99,7 @@ public class GameManager : MonoBehaviour
             var inst = Instantiate(playerPrefab, spline.transform);
             var c = inst.GetComponent<CharController>();
             c.OnTrigger.AddListener(OnCharTrigger);
+            c.Ondestroy.AddListener(OnCharDestroy);
             _chars.Add(c);
         }
         CharsUpdate(points);
@@ -93,15 +111,26 @@ public class GameManager : MonoBehaviour
         {
             case "Enemy":
                 obj.transform.parent = spline.transform;
+                obj.tag = "Player";
                 var c = obj.GetComponent<CharController>();
                 c.OnTrigger.AddListener(OnCharTrigger);
+                c.Ondestroy.AddListener(OnCharDestroy);
                 _chars.Add(c);
                 CharsUpdate(_cachedPoints);
                 break;
             case "Finish":
-                StopGame();
+                StopGame(true);
+                break;
+            case "Trap":
                 break;
         }
+    }
+
+    private void OnCharDestroy(CharController charController)
+    {
+        _chars.Remove(charController);
+        uiController.UpdateScore(_chars.Count);
+        if (_chars.Count == 0) StopGame(false);
     }
 
     private void CharsUpdate(Vector3[] points)
@@ -115,6 +144,8 @@ public class GameManager : MonoBehaviour
             if (index > spline.Spline.pointCount - 1) index = spline.Spline.pointCount - 1;
             _chars[i].Move(spline.Spline.GetPointPosition(index));
         }
+
+        uiController.UpdateScore(_chars.Count);
     }
 
 }

@@ -9,7 +9,7 @@ public class UiController : MonoBehaviour
 
     public void UpdateScore(int score)
     {
-        this.score.text = score.ToString();
+        this.score.text = "Enemies: " + score.ToString();
     }
 
     public void ChangeTipStatus(bool isShow)

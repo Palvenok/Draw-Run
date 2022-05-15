@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class Level : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem[] fireworks;
     private float _levelSpeed = 1;
 
     public float Speed { set { _levelSpeed = value; } }
@@ -15,11 +17,20 @@ public class Level : MonoBehaviour
         StartCoroutine(MoveLevel());
     }
 
-    public void StopLevel()
+    public void StopLevel(bool isWin)
     {
         StopAllCoroutines();
-        Debug.Log("Stoped");
         isGameActive = false;
+        if (isWin) StartCoroutine(Win());
+    }
+
+    private IEnumerator Win()
+    {
+        while(true)
+        {
+            fireworks[UnityEngine.Random.Range(0, fireworks.Length)].Play();
+            yield return new WaitForSeconds(.5f);
+        }
     }
 
     private IEnumerator MoveLevel()

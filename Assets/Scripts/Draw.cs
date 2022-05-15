@@ -25,7 +25,7 @@ public class Draw : MonoBehaviour
                 Random.Range(-1, 1));
         }
 
-        OnLineUpdate.Invoke(randomStart);
+        OnLineUpdate?.Invoke(randomStart);
     }
 
     private void Update()
@@ -44,7 +44,7 @@ public class Draw : MonoBehaviour
         {
             if (transform.childCount != 0)
             {
-                OnLineUpdate.Invoke(points.ToArray());
+                OnLineUpdate?.Invoke(points.ToArray());
                 foreach (Transform R in transform)
                 {
                     Destroy(R.gameObject);

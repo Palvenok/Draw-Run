@@ -15,7 +15,7 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 1
-  m_FogColor: {r: 0.37647063, g: 0.7019608, b: 0.90196085, a: 1}
+  m_FogColor: {r: 0.5529412, g: 0.82745105, b: 0.87843144, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
   m_LinearFogStart: 50
@@ -611,7 +611,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.37647066, g: 0.7017375, b: 0.9019608, a: 1}
+  m_BackGroundColor: {r: 0.5529412, g: 0.82898855, b: 0.8784314, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -690,10 +690,10 @@ RectTransform:
   m_Father: {fileID: 624016765}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -193, y: -85}
-  m_SizeDelta: {x: 279.688, y: 117.339966}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 317.6, y: -85}
+  m_SizeDelta: {x: 496.9, y: 117.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1062853035
 MonoBehaviour:
@@ -717,12 +717,12 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 75
+    m_FontSize: 70
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 75
-    m_Alignment: 5
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -773,10 +773,9 @@ MonoBehaviour:
   playerPrefab: {fileID: 7368523095385381557, guid: 0fe1b878e5d044e4da20a7083cb4797e,
     type: 3}
   draw: {fileID: 44545889}
-  anim: {fileID: 0}
   levelsConfig: {fileID: 11400000, guid: c805a5d400c81674ba3a50084332fe06, type: 2}
   startEnemyCount: 20
-  levelSpeed: 50
+  levelSpeed: 10
 --- !u!4 &1485728352
 Transform:
   m_ObjectHideFlags: 0

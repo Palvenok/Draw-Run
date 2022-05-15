@@ -7,8 +7,10 @@ using UnityEngine.Events;
 public class CharController : MonoBehaviour
 {
     public UnityEvent<GameObject> OnTrigger;
+    public UnityEvent<CharController> Ondestroy;
 
     [SerializeField] private Animator anim;
+    [SerializeField] private ParticleSystem poof;
 
     public void Move(Vector3 vector3)
     {
@@ -34,6 +36,21 @@ public class CharController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        OnTrigger.Invoke(other.gameObject);
+        OnTrigger?.Invoke(other.gameObject);
+
+        if(other.CompareTag("Trap"))
+        {
+            var p = Instantiate(poof, GameManager.main.CurrentLevel.transform);
+            p.transform.position = transform.position;
+            p.transform.localScale = Vector3.one * 1.15f;
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Ondestroy?.Invoke(this);
+        StopAllCoroutines();
+        OnTrigger?.RemoveAllListeners();
     }
 }
