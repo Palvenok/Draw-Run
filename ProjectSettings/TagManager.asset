@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - DrawPanel
+  - Trap
+  - Enemy
   layers:
   - Default
   - TransparentFX

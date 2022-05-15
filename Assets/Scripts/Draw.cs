@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class Draw : MonoBehaviour
 {
-    public UnityEvent<Vector3[]> OnLineUpdate; 
+    public UnityEvent<Vector3[]> OnLineUpdate;
 
     [SerializeField] private LineRenderer linePrefab;
 
@@ -15,6 +15,17 @@ public class Draw : MonoBehaviour
     private void Start()
     {
         cam = Camera.main;
+
+        Vector3[] randomStart = new Vector3[10];
+
+        for(int i = 0; i < randomStart.Length ; i++)
+        {
+             randomStart[i] = new Vector3(Random.Range(-1, 1),
+                Random.Range(-1, 1),
+                Random.Range(-1, 1));
+        }
+
+        OnLineUpdate.Invoke(randomStart);
     }
 
     private void Update()
@@ -33,6 +44,7 @@ public class Draw : MonoBehaviour
         {
             if (transform.childCount != 0)
             {
+                OnLineUpdate.Invoke(points.ToArray());
                 foreach (Transform R in transform)
                 {
                     Destroy(R.gameObject);
@@ -54,7 +66,6 @@ public class Draw : MonoBehaviour
         {
             currentTrail.positionCount = points.Count;
             currentTrail.SetPositions(points.ToArray());
-            OnLineUpdate.Invoke(points.ToArray());
         }
     }
 
